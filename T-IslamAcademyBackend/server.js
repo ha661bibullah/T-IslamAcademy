@@ -77,9 +77,11 @@ const Review = mongoose.model(
     rating: { type: Number, required: true, min: 1, max: 5 },
     reviewText: { type: String, required: true },
     date: { type: Date, default: Date.now },
-    isApproved: { type: Boolean, default: true }, // Admin approval required
-  }),
-)
+    isApproved: { type: Boolean, default: true },
+    // নতুন ফিল্ড যোগ করুন - প্রতিটি রিভিউ ইউনিক আইডেন্টিফায়ার
+    reviewId: { type: String, unique: true, default: () => Math.random().toString(36).substr(2, 9) }
+  })
+);
 
 // মিডলওয়্যার
 app.use(cors())
@@ -559,9 +561,10 @@ app.get("/api/reviews/:courseId", async (req, res) => {
 })
 
 // Submit a new review
+// Submit a new review - একই ইউজার একাধিক রিভিউ দিতে পারবে
 app.post("/api/reviews", async (req, res) => {
   try {
-    const { courseId, reviewerName, reviewerEmail, rating, reviewText } = req.body
+    const { courseId, reviewerName, reviewerEmail, rating, reviewText } = req.body;
 
     if (!courseId || !reviewerName || !reviewerEmail || !rating || !reviewText) {
       return res.status(400).json({
@@ -574,63 +577,53 @@ app.post("/api/reviews", async (req, res) => {
           rating: !rating,
           reviewText: !reviewText,
         },
-      })
+      });
     }
 
     if (rating < 1 || rating > 5) {
       return res.status(400).json({
         success: false,
         message: "রেটিং ১ থেকে ৫ এর মধ্যে হতে হবে",
-      })
+      });
     }
 
-    // Check if user has already reviewed this course
-    const existingReview = await Review.findOne({
-      courseId,
-      reviewerEmail,
-    })
-
-    if (existingReview) {
-      return res.status(400).json({
-        success: false,
-        message: "আপনি ইতিমধ্যে এই কোর্সের রিভিউ দিয়েছেন",
-      })
-    }
-
-    // Create new review
+    // একই ইউজারের একাধিক রিভিউ অনুমোদন করা হবে
+    // Create new review (এখন আর existing review চেক করা হবে না)
     const review = new Review({
       courseId,
       reviewerName,
       reviewerEmail,
       rating: Number.parseInt(rating),
       reviewText,
-    })
+      reviewId: Math.random().toString(36).substr(2, 9) // ইউনিক আইডি জেনারেট
+    });
 
-    await review.save()
+    await review.save();
 
-    res.setHeader("Content-Type", "application/json")
+    res.setHeader("Content-Type", "application/json");
     res.status(201).json({
       success: true,
-      message: "রিভিউ সফলভাবে জমা দেওয়া হয়েছে। অনুমোদনের পর প্রকাশিত হবে।",
+      message: "রিভিউ সফলভাবে জমা দেওয়া হয়েছে",
       review: {
         id: review._id,
+        reviewId: review.reviewId,
         courseId: review.courseId,
         reviewerName: review.reviewerName,
         rating: review.rating,
         reviewText: review.reviewText,
         date: review.date,
       },
-    })
+    });
   } catch (error) {
-    console.error("Error submitting review:", error)
-    res.setHeader("Content-Type", "application/json")
+    console.error("Error submitting review:", error);
+    res.setHeader("Content-Type", "application/json");
     res.status(500).json({
       success: false,
       message: "রিভিউ জমা দিতে সমস্যা হয়েছে",
       error: error.message,
-    })
+    });
   }
-})
+});
 
 // Admin: Get all reviews (pending and approved)
 app.get("/api/admin/reviews", async (req, res) => {

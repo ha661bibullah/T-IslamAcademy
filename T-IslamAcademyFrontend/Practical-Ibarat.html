@@ -1533,7 +1533,7 @@
 <!-- In your header section -->
 <div class="dropdown-content" id="desktopDropdownContent">
     <a href="#"><i class="fas fa-user"></i> প্রোফাইল তথ্য</a>
-    <a href="/Talimul Islam Frontend/Our-Course.html" class="nav-link"><i class="fas fa-book"></i> আমার কোর্স</a>
+    <a href="/TalimulFcopy/my-course.html" class="nav-link"><i class="fas fa-book"></i> আমার কোর্স</a>
     <a href="#" id="desktopLogoutButton"><i class="fas fa-sign-out-alt"></i> লগআউট</a>
 </div>
             </div>
@@ -2401,7 +2401,7 @@
 async function sendOTP(email, otp) {
     showLoading();
     try {
-        const response = await fetch('https://tttt-tbz0.onrender.com/api/send-otp', {
+        const response = await fetch('https://t-islamacademy.onrender.com/api/send-otp', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -2430,7 +2430,7 @@ async function sendOTP(email, otp) {
 async function verifyOTP(email, otp) {
   showLoading();
   try {
-    const response = await fetch('https://tttt-tbz0.onrender.com/api/verify-otp', {
+    const response = await fetch('https://t-islamacademy.onrender.com/api/verify-otp', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -2466,7 +2466,7 @@ async function verifyOTP(email, otp) {
 async function registerUser(name, email, password) {
     showLoading();
     try {
-        const response = await fetch('https://tttt-tbz0.onrender.com/api/register', {
+        const response = await fetch('https://t-islamacademy.onrender.com/api/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -2504,7 +2504,7 @@ async function registerUser(name, email, password) {
 async function loginUser(email, password) {
     showLoading();
     try {
-        const response = await fetch('https://tttt-tbz0.onrender.com/api/login', {
+        const response = await fetch('https://t-islamacademy.onrender.com/api/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -2547,7 +2547,7 @@ async function loginUser(email, password) {
 async function resetPassword(email, newPassword) {
     showLoading();
     try {
-        const response = await fetch('https://tttt-tbz0.onrender.com/api/reset-password', {
+        const response = await fetch('https://t-islamacademy.onrender.com/api/reset-password', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -2711,7 +2711,7 @@ document.getElementById('otpVerificationForm').addEventListener('submit', async 
     try {
         // পাসওয়ার্ড রিসেট ফ্লো হলে
         if (resetPasswordEmail) {
-            const response = await fetch('https://tttt-tbz0.onrender.com/api/verify-reset-otp', {
+            const response = await fetch('https://t-islamacademy.onrender.com/api/verify-reset-otp', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -2824,7 +2824,7 @@ document.getElementById('otpVerificationForm').addEventListener('submit', async 
                 
                 showLoading();
                 try {
-                    const response = await fetch('https://tttt-tbz0.onrender.com/api/forgot-password', {
+                    const response = await fetch('https://t-islamacademy.onrender.com/api/forgot-password', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -2883,7 +2883,7 @@ document.getElementById('otpVerificationForm').addEventListener('submit', async 
         const otp4 = document.getElementById('otp4').value;
         const otp = otp1 + otp2 + otp3 + otp4;
         
-        const response = await fetch('https://tttt-tbz0.onrender.com/api/reset-password', {
+        const response = await fetch('https://t-islamacademy.onrender.com/api/reset-password', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -3186,8 +3186,6 @@ window.togglePasswordVisibility = function(inputId, toggleId) {
     }
 };
 </script>
-
-
 
 
 
@@ -4549,8 +4547,13 @@ window.togglePasswordVisibility = function(inputId, toggleId) {
                         </div>
                     </div>
                     
-                   <div class="review-form hidden" id="reviewForm">
+<div class="review-form" id="reviewForm">
     <h3>আপনার রিভিউ লিখুন</h3>
+       <!-- সাকসেস মেসেজ যোগ করুন -->
+    <div id="reviewSuccessMessage" style="display: none; background: #d4edda; color: #155724; padding: 10px; border-radius: 5px; margin-bottom: 15px;">
+        আপনার রিভিউ সফলভাবে জমা দেওয়া হয়েছে! আপনি চাইলে আরও রিভিউ দিতে পারেন।
+    </div>
+    
     <div class="rating-select">
         <select id="rating">
             <option value="">রেটিং নির্বাচন করুন</option>
@@ -4572,6 +4575,9 @@ window.togglePasswordVisibility = function(inputId, toggleId) {
     </div>
     <textarea class="review-textarea" id="reviewText" placeholder="আপনার অভিজ্ঞতা লিখুন..."></textarea>
     <button class="submit-review" onclick="submitReview()">রিভিউ জমা দিন</button>
+    <p style="font-size: 13px; color: #666; margin-top: 10px;">
+        আপনি এই কোর্সের জন্য একাধিক রিভিউ দিতে পারেন। প্রতিটি রিভিউ আমাদের জন্য গুরুত্বপূর্ণ।
+    </p>
 </div>
                 </div>
             </div>
@@ -5557,61 +5563,77 @@ function activateCourse() {
 
 // Show notification
 
-// Submit review to backend
-// রিভিউ সাবমিট ফাংশন
-// রিভিউ সাবমিট ফাংশন
-async function submitReview() {
+// Submit review function - একাধিক রিভিউ সাপোর্ট সহ
+function submitReview() {
     const rating = document.getElementById('rating').value;
     const reviewText = document.getElementById('reviewText').value;
     
-    if (!rating || !reviewText) {
-        showNotification('error', 'অনুগ্রহ করে রেটিং এবং রিভিউ লিখুন');
+    // Get current user from localStorage
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    
+    if (!currentUser) {
+        showLoginAlert();
         return;
     }
-
-    try {
-        // Get current user info
-        const user = JSON.parse(localStorage.getItem('currentUser'));
-        if (!user) {
-            showNotification('error', 'রিভিউ দিতে লগইন করুন');
-            return;
-        }
-
-        const response = await fetch('https://tttt-tbz0.onrender.com/api/reviews', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                courseId: 'practical-ibarot',
-                reviewerName: user.name,
-                reviewerEmail: user.email,
-                rating: rating,
-                reviewText: reviewText
-            })
-        });
-
-        const result = await response.json();
-        
-        if (response.ok) {
-            showNotification('success', 'আপনার রিভিউ জমা দেওয়া হয়েছে! অনুমোদনের পর প্রকাশিত হবে।');
-            
-            // Clear form
-            document.getElementById('reviewText').value = '';
-            document.getElementById('rating').value = '';
-            
-            // Reload reviews after submission
-            await loadReviews();
-        } else {
-            showNotification('error', result.message || 'রিভিউ জমা দিতে সমস্যা হয়েছে');
-        }
-        
-    } catch (error) {
-        console.error('Error submitting review:', error);
-        showNotification('error', error.message || 'রিভিউ জমা দিতে সমস্যা হয়েছে');
+    
+    if (!rating || !reviewText) {
+        showNotification('অনুগ্রহ করে রেটিং এবং রিভিউ টেক্সট পূরণ করুন', 'error');
+        return;
     }
+    
+    const reviewData = {
+        courseId: 'practical-ibarat',
+        reviewerName: currentUser.name,
+        reviewerEmail: currentUser.email,
+        rating: rating,
+        reviewText: reviewText
+    };
+    
+    fetch('https://t-islamacademy.onrender.com/api/reviews', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+        },
+        body: JSON.stringify(reviewData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showNotification('আপনার রিভিউ সফলভাবে জমা দেওয়া হয়েছে!', 'success');
+            
+            // Add the new review to the UI dynamically
+            const newReview = createReviewElement({
+                reviewerName: currentUser.name,
+                reviewerEmail: currentUser.email,
+                rating: rating,
+                reviewText: reviewText,
+                date: new Date().toISOString(),
+                isApproved: true
+            });
+            
+            const reviewsContainer = document.querySelector('.reviews-container');
+            if (reviewsContainer) {
+                reviewsContainer.insertBefore(newReview, reviewsContainer.firstChild);
+            }
+            
+            // Clear the form (কিন্তু রেটিং রিসেট করবেন না)
+            document.getElementById('reviewText').value = '';
+            
+            // সফলতা মেসেজ দেখান
+            document.getElementById('reviewSuccessMessage').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('reviewSuccessMessage').style.display = 'none';
+            }, 3000);
+        } else {
+            showNotification(data.message || 'রিভিউ জমা দিতে সমস্যা হয়েছে', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error submitting review:', error);
+        showNotification('রিভিউ জমা দিতে সমস্যা হয়েছে', 'error');
+    });
 }
-
 // UI-তে রিভিউ যোগ করুন
 
 // UI-তে রিভিউ যোগ করুন
@@ -5914,7 +5936,7 @@ document.getElementById('manualPaymentForm').addEventListener('submit', async fu
     };
 
     try {
-        const response = await fetch('https://tttt-tbz0.onrender.com/api/payments', {
+        const response = await fetch('https://t-islamacademy.onrender.com/api/payments', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -6794,7 +6816,7 @@ window.addEventListener('DOMContentLoaded', function() {
 // Listen for course access updates
 // ক্লায়েন্ট সাইড (Practical-Ibarat.html)
 if (typeof io !== 'undefined') {
-    const socket = io('https://tttt-tbz0.onrender.com');
+    const socket = io('https://t-islamacademy.onrender.com');
 
     socket.on('courseAccessUpdated', (data) => {
         const user = JSON.parse(localStorage.getItem('currentUser'));
@@ -6871,7 +6893,7 @@ function showErrorMessage(message) {
 function setupCourseAccessListener() {
     // WebSocket connection
     if (typeof io !== 'undefined') {
-        const socket = io('https://tttt-tbz0.onrender.comm');
+        const socket = io('https://t-islamacademy.onrender.comm');
         
         socket.on('courseAccessUpdated', (data) => {
             const user = JSON.parse(localStorage.getItem('currentUser'));
@@ -6905,7 +6927,7 @@ let socket;
         // Initialize Socket.IO connection
         function initializeSocket() {
             try {
-                socket = io('https://tttt-tbz0.onrender.com', {
+                socket = io('https://t-islamacademy.onrender.com', {
                     transports: ['websocket', 'polling'],
                     timeout: 20000,
                     reconnection: true,
@@ -6955,7 +6977,7 @@ let socket;
 
             try {
                 // Check user's courses from server
-                const response = await fetch(`https://tttt-tbz0.onrender.com/api/users/${currentUser.email}/courses`);
+                const response = await fetch(`https://t-islamacademy.onrender.com/api/users/${currentUser.email}/courses`);
                 
                 if (!response.ok) {
                     throw new Error('Failed to fetch user courses');
@@ -7202,7 +7224,7 @@ let socket;
 
         
 const apiHelper = {
-    baseURL: 'https://tttt-tbz0.onrender.com/api',
+    baseURL: 'https://t-islamacademy.onrender.com/api',
     
     async makeRequest(endpoint, options = {}) {
         const url = `${this.baseURL}${endpoint}`;
@@ -7427,43 +7449,26 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-async function loadReviews() {
-    try {
-        const response = await fetch('https://tttt-tbz0.onrender.com/api/reviews/practical-ibarot');
-        const result = await response.json();
-        
-        const reviewsContainer = document.querySelector('.reviews-container');
-        
-        // Clear only existing dynamic reviews (keep the first 4 static reviews)
-        const dynamicReviews = document.querySelectorAll('.review.dynamic-review');
-        dynamicReviews.forEach(review => review.remove());
-        
-        if (response.ok && result.reviews && result.reviews.length > 0) {
-            result.reviews.forEach(review => {
-                // Only add reviews that are not already in the static content
-                if (!isStaticReview(review)) {
-                    const reviewElement = document.createElement('div');
-                    reviewElement.className = 'review dynamic-review';
-                    reviewElement.innerHTML = `
-                        <div class="review-header">
-                            <div class="reviewer-avatar">${review.reviewerName.charAt(0)}</div>
-                            <div>
-                                <div class="reviewer-name">${review.reviewerName}</div>
-                                <div class="star-rating">${'⭐'.repeat(review.rating)}</div>
-                            </div>
-                            <div class="review-date">${formatDate(review.date)}</div>
-                        </div>
-                        <div class="review-text">${review.reviewText}</div>
-                    `;
-                    reviewsContainer.appendChild(reviewElement);
-                }
+// Load reviews for the course
+function loadReviews() {
+    fetch(`https://t-islamacademy.onrender.com/api/reviews/practical-ibarat`)
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            const reviewsContainer = document.querySelector('.reviews-container');
+            reviewsContainer.innerHTML = ''; // ক্লিয়ার করবেন না, শুধু নতুনগুলো যোগ করুন
+            
+            // সব রিভিউ যোগ করুন (পুরানো এবং নতুন উভয়ই)
+            data.reviews.forEach(review => {
+                const reviewElement = createReviewElement(review);
+                reviewsContainer.appendChild(reviewElement);
             });
         }
-    } catch (error) {
+    })
+    .catch(error => {
         console.error('Error loading reviews:', error);
-    }
+    });
 }
-
 // Helper function to check if a review exists in static content
 function isStaticReview(review) {
     const staticReviewers = ['আবু বকর সিদ্দিক', 'মুহাম্মদ কাসেম', 'ফাতিমা খাতুন', 'আব্দুল্লাহ আল মামুন'];
@@ -7505,7 +7510,39 @@ function checkReviewFormVisibility() {
 // Call this function when page loads and after login
 document.addEventListener('DOMContentLoaded', checkReviewFormVisibility);
 
-</script>       
+
+
+// Helper function to create review element
+// UI-তে নতুন রিভিউ এলিমেন্ট তৈরি করার ফাংশন
+function createReviewElement(review) {
+    const reviewElement = document.createElement('div');
+    reviewElement.className = 'review dynamic-review';
+    
+    const reviewDate = new Date(review.date);
+    const formattedDate = reviewDate.toLocaleDateString('bn-BD', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    }) + ' ' + reviewDate.toLocaleTimeString('bn-BD', {
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+
+    reviewElement.innerHTML = `
+        <div class="review-header">
+            <div class="reviewer-avatar">${review.reviewerName.charAt(0).toUpperCase()}</div>
+            <div>
+                <div class="reviewer-name">${review.reviewerName}</div>
+                <div class="star-rating">${'⭐'.repeat(review.rating)}</div>
+            </div>
+            <div class="review-date">${formattedDate}</div>
+        </div>
+        <div class="review-text">${review.reviewText}</div>
+    `;
+    
+    return reviewElement;
+}
+</script>        
 
 
 
