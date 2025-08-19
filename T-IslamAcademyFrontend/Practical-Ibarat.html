@@ -4336,6 +4336,15 @@ window.togglePasswordVisibility = function(inputId, toggleId) {
     background-color: rgba(94, 53, 177, 0.05);
     border-left: 3px solid var(--primary-color);
 }
+
+.modal-video {
+    width: 100%;
+    height: 80vh;   /* viewport height এর 80% */
+    display: block;
+    margin: 0 auto; /* horizontally center */
+    border-radius: 10px;
+}
+
 </style>        
 <div class="container2">
         <header>
@@ -4957,59 +4966,31 @@ function openVideoModal(videoId) {
     const videos = {
         'lesson-1': {
             title: 'ইবারত শিক্ষার গুরুত্ব ও প্রয়োজনীয়তা',
-            url: 'https://res.cloudinary.com/ddtfpqimk/video/upload/v1753088101/video_esq7dv.mp4'
+            url: 'https://www.youtube.com/embed/VEBtNGm_ym8?si=l_dyR8FlPPd7TsDb'
         },
         'lesson-2': {
             title: 'আরবি বর্ণমালা ও উচ্চারণ',
-            url: 'https://res.cloudinary.com/ddtfpqimk/video/upload/v1753088101/video_esq7dv.mp4'
+            url: 'https://www.youtube.com/embed/VEBtNGm_ym8?si=l_dyR8FlPPd7TsDb'
         },
         'lesson-3': {
             title: 'নাহু (ব্যাকরণ) এর মৌলিক ধারণা',
-            url: 'https://res.cloudinary.com/ddtfpqimk/video/upload/v1753088101/video_esq7dv.mp4'
+            url: 'https://www.youtube.com/embed/VEBtNGm_ym8?si=l_dyR8FlPPd7TsDb'
         },
-        'lesson-4': {
-            title: 'সরফ (শব্দতত্ত্ব) এর মৌলিক ধারণা',
-            url: 'https://res.cloudinary.com/ddtfpqimk/video/upload/v1753088101/video_esq7dv.mp4'
-        },
-        'lesson-5': {
-            title: 'বাক্য গঠন ও বিশ্লেষণ',
-            url: 'https://res.cloudinary.com/ddtfpqimk/video/upload/v1753088101/video_esq7dv.mp4'
-        },
-        'lesson-6': {
-            title: 'ইবারত পড়ার কৌশল',
-            url: 'https://res.cloudinary.com/ddtfpqimk/video/upload/v1753088101/video_esq7dv.mp4'
-        },
-        'lesson-7': {
-            title: 'ইবারত অনুবাদের নিয়মকানুন',
-            url: 'https://res.cloudinary.com/ddtfpqimk/video/upload/v1753088101/video_esq7dv.mp4'
-        },
-        'lesson-8': {
-            title: 'কুরআনের ইবারত বিশ্লেষণ',
-            url: 'https://res.cloudinary.com/ddtfpqimk/video/upload/v1753088101/video_esq7dv.mp4'
-        },
-        'lesson-9': {
-            title: 'হাদিসের ইবারত বিশ্লেষণ',
-            url: 'https://res.cloudinary.com/ddtfpqimk/video/upload/v1753088101/video_esq7dv.mp4'
-        },
-        'lesson-10': {
-            title: 'ইবারত শিক্ষার প্রায়োগিক কৌশল',
-            url: 'https://res.cloudinary.com/ddtfpqimk/video/upload/v1753088101/video_esq7dv.mp4'
-        }
+        // ... বাকি লেসন গুলো একইভাবে
     };
 
     if (videos[videoId]) {
         const video = videos[videoId];
         document.getElementById('videoTitle').textContent = video.title;
         document.getElementById('videoContent').innerHTML = `
-            <video class="modal-video" controls controlsList="nodownload">
-                <source src="${video.url}" type="video/mp4">
-                আপনার ব্রাউজার ভিডিও সাপোর্ট করে না।
-            </video>
+            <iframe class="modal-video"
+                src="${video.url}"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+            </iframe>
         `;
         document.getElementById('videoModal').style.display = 'block';
-        
-        // Setup protection for the new video element
-        setupVideoProtection();
     }
 }
 
@@ -7127,31 +7108,35 @@ let socket;
             }
         }
 
-        function openVideoModal(videoId) {
-            if (!courseUnlocked) {
-                showLockedContentAlert('ভিডিও দেখার জন্য কোর্সটি ক্রয় করুন');
-                return;
-            }
+//         function openVideoModal(videoId) {
+//             if (!courseUnlocked) {
+//                 showLockedContentAlert('ভিডিও দেখার জন্য কোর্সটি ক্রয় করুন');
+//                 return;
+//             }
             
-            const videos = {
-                'lesson-1': {
-                    title: 'ইবারত শিক্ষার গুরুত্ব ও প্রয়োজনীয়তা',
-                    url: 'https://res.cloudinary.com/ddtfpqimk/video/upload/v1753088101/video_esq7dv.mp4'
-                },
-                // ... other videos
-            };
+//             const videos = {
+//     'lesson-1': {
+//         title: 'ইবারত শিক্ষার গুরুত্ব ও প্রয়োজনীয়তা',
+//         url: 'https://www.youtube.com/embed/VEBtNGm_ym8?si=l_dyR8FlPPd7TsDb'
+//     },
+//     'lesson-2': {
+//         title: 'আরবি বর্ণমালা ও উচ্চারণ',
+//         url: 'https://www.youtube.com/embed/VEBtNGm_ym8?si=l_dyR8FlPPd7TsDb'
+//     },
+//     // ... অন্যগুলো একইভাবে
+// };
+
+//             const video = videos[videoId];
+//             if (!video) return;
             
-            const video = videos[videoId];
-            if (!video) return;
+//             const modal = document.getElementById('videoModal');
+//             const modalTitle = modal.querySelector('.modal-title');
+//             const modalVideo = modal.querySelector('.modal-video');
             
-            const modal = document.getElementById('videoModal');
-            const modalTitle = modal.querySelector('.modal-title');
-            const modalVideo = modal.querySelector('.modal-video');
-            
-            modalTitle.textContent = video.title;
-            modalVideo.src = video.url;
-            modal.style.display = 'block';
-        }
+//             modalTitle.textContent = video.title;
+//             modalVideo.src = video.url;
+//             modal.style.display = 'block';
+//         }
 
         function openPdfModal(pdfUrl) {
             if (!courseUnlocked) {
