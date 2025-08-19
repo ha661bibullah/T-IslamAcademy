@@ -6161,15 +6161,15 @@ function showNotification(type, message) {
     const popup = document.createElement('div');
     popup.className = `custom-popup`;
     
-    popup.innerHTML = `
-        <div class="popup-content popup-${type}">
-            <div class="popup-icon">
-                ${type === 'success' ? '✓' : '⚠️'}
-            </div>
-            <div class="popup-message">${message}</div>
-            <button class="popup-close" onclick="this.parentElement.parentElement.remove()">×</button>
-        </div>
-    `;
+    // popup.innerHTML = `
+    //     <div class="popup-content popup-${type}">
+    //         <div class="popup-icon">
+    //             ${type === 'success' ? '✓' : '⚠️'}
+    //         </div>
+    //         <div class="popup-message">${message}</div>
+    //         <button class="popup-close" onclick="this.parentElement.parentElement.remove()">×</button>
+    //     </div>
+    // `;
     
     document.body.appendChild(popup);
     
