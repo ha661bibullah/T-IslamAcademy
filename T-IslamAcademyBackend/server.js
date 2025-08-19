@@ -77,11 +77,9 @@ const Review = mongoose.model(
     rating: { type: Number, required: true, min: 1, max: 5 },
     reviewText: { type: String, required: true },
     date: { type: Date, default: Date.now },
-    isApproved: { type: Boolean, default: true },
-    version: { type: Number, default: 1 }, // Track review versions
-    isLatest: { type: Boolean, default: true } // Mark latest review
+    isApproved: { type: Boolean, default: true }, // Admin approval required
   }),
-);
+)
 
 // মিডলওয়্যার
 app.use(cors())
