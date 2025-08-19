@@ -4548,9 +4548,8 @@ window.togglePasswordVisibility = function(inputId, toggleId) {
                             </div>
                         </div>
                     </div>
-                
-
-<div class="review-form hidden" id="reviewForm">
+                    
+                   <div class="review-form hidden" id="reviewForm">
     <h3>আপনার রিভিউ লিখুন</h3>
     <div class="rating-select">
         <select id="rating">
@@ -4573,9 +4572,6 @@ window.togglePasswordVisibility = function(inputId, toggleId) {
     </div>
     <textarea class="review-textarea" id="reviewText" placeholder="আপনার অভিজ্ঞতা লিখুন..."></textarea>
     <button class="submit-review" onclick="submitReview()">রিভিউ জমা দিন</button>
-    <p style="font-size: 13px; color: #666; margin-top: 10px;">
-        আপনি এই কোর্সের জন্য একাধিক রিভিউ দিতে পারেন। প্রতিটি রিভিউ আমাদের জন্য গুরুত্বপূর্ণ।
-    </p>
 </div>
                 </div>
             </div>
@@ -5562,72 +5558,60 @@ function activateCourse() {
 // Show notification
 
 // Submit review to backend
-// Submit review function
-function submitReview() {
+// রিভিউ সাবমিট ফাংশন
+// রিভিউ সাবমিট ফাংশন
+async function submitReview() {
     const rating = document.getElementById('rating').value;
     const reviewText = document.getElementById('reviewText').value;
     
-    // Get current user from localStorage
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    
-    if (!currentUser) {
-        showLoginAlert();
-        return;
-    }
-    
     if (!rating || !reviewText) {
-        showNotification('অনুগ্রহ করে রেটিং এবং রিভিউ টেক্সট পূরণ করুন', 'error');
+        showNotification('error', 'অনুগ্রহ করে রেটিং এবং রিভিউ লিখুন');
         return;
     }
-    
-    const reviewData = {
-        courseId: 'practical-ibarat',
-        reviewerName: currentUser.name,
-        reviewerEmail: currentUser.email,
-        rating: rating,
-        reviewText: reviewText
-    };
-    
-    fetch('https://tttt-tbz0.onrender.com/api/reviews', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('authToken')}`
-        },
-        body: JSON.stringify(reviewData)
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            showNotification('আপনার রিভিউ সফলভাবে জমা দেওয়া হয়েছে!', 'success');
-            
-            // Add the new review to the UI dynamically
-            const newReview = createReviewElement({
-                reviewerName: currentUser.name,
-                reviewerEmail: currentUser.email,
-                rating: rating,
-                reviewText: reviewText,
-                date: new Date().toISOString(),
-                isApproved: true // Assuming auto-approval for simplicity
-            });
-            
-            const reviewsContainer = document.querySelector('.reviews-container');
-            if (reviewsContainer) {
-                reviewsContainer.insertBefore(newReview, reviewsContainer.firstChild);
-            }
-            
-            // Clear the form
-            document.getElementById('rating').value = '';
-            document.getElementById('reviewText').value = '';
-        } else {
-            showNotification(data.message || 'রিভিউ জমা দিতে সমস্যা হয়েছে', 'error');
+
+    try {
+        // Get current user info
+        const user = JSON.parse(localStorage.getItem('currentUser'));
+        if (!user) {
+            showNotification('error', 'রিভিউ দিতে লগইন করুন');
+            return;
         }
-    })
-    .catch(error => {
+
+        const response = await fetch('https://tttt-tbz0.onrender.com/api/reviews', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                courseId: 'practical-ibarot',
+                reviewerName: user.name,
+                reviewerEmail: user.email,
+                rating: rating,
+                reviewText: reviewText
+            })
+        });
+
+        const result = await response.json();
+        
+        if (response.ok) {
+            showNotification('success', 'আপনার রিভিউ জমা দেওয়া হয়েছে! অনুমোদনের পর প্রকাশিত হবে।');
+            
+            // Clear form
+            document.getElementById('reviewText').value = '';
+            document.getElementById('rating').value = '';
+            
+            // Reload reviews after submission
+            await loadReviews();
+        } else {
+            showNotification('error', result.message || 'রিভিউ জমা দিতে সমস্যা হয়েছে');
+        }
+        
+    } catch (error) {
         console.error('Error submitting review:', error);
-        showNotification('রিভিউ জমা দিতে সমস্যা হয়েছে', 'error');
-    });
+        showNotification('error', error.message || 'রিভিউ জমা দিতে সমস্যা হয়েছে');
+    }
 }
+
 // UI-তে রিভিউ যোগ করুন
 
 // UI-তে রিভিউ যোগ করুন
@@ -7521,43 +7505,7 @@ function checkReviewFormVisibility() {
 // Call this function when page loads and after login
 document.addEventListener('DOMContentLoaded', checkReviewFormVisibility);
 
-
-
-
-
-// Helper function to create review element
-function createReviewElement(review) {
-    const reviewElement = document.createElement('div');
-    reviewElement.className = 'review dynamic-review';
-    
-    // Create avatar from first letter of name
-    const avatarLetter = review.reviewerName.charAt(0).toUpperCase();
-    
-    // Format date
-    const reviewDate = new Date(review.date);
-    const formattedDate = `${reviewDate.getDate()}/${reviewDate.getMonth()+1}/${reviewDate.getFullYear()}`;
-    
-    // Create star rating
-    let stars = '';
-    for (let i = 0; i < 5; i++) {
-        stars += i < review.rating ? '⭐' : '☆';
-    }
-    
-    reviewElement.innerHTML = `
-        <div class="review-header">
-            <div class="reviewer-avatar">${avatarLetter}</div>
-            <div>
-                <div class="reviewer-name">${review.reviewerName}</div>
-                <div class="star-rating">${stars}</div>
-            </div>
-            <div class="review-date">${formattedDate}</div>
-        </div>
-        <div class="review-text">${review.reviewText}</div>
-    `;
-    
-    return reviewElement;
-}
-</script>        
+</script>       
 
 
 

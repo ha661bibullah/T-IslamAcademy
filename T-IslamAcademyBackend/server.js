@@ -559,7 +559,6 @@ app.get("/api/reviews/:courseId", async (req, res) => {
 })
 
 // Submit a new review
-// Submit a new review (updated to allow multiple reviews)
 app.post("/api/reviews", async (req, res) => {
   try {
     const { courseId, reviewerName, reviewerEmail, rating, reviewText } = req.body
@@ -585,7 +584,19 @@ app.post("/api/reviews", async (req, res) => {
       })
     }
 
-    // Remove the existing review check to allow multiple reviews
+    // Check if user has already reviewed this course
+    const existingReview = await Review.findOne({
+      courseId,
+      reviewerEmail,
+    })
+
+    if (existingReview) {
+      return res.status(400).json({
+        success: false,
+        message: "আপনি ইতিমধ্যে এই কোর্সের রিভিউ দিয়েছেন",
+      })
+    }
+
     // Create new review
     const review = new Review({
       courseId,
