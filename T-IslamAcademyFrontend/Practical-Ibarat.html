@@ -4336,8 +4336,6 @@ window.togglePasswordVisibility = function(inputId, toggleId) {
     background-color: rgba(94, 53, 177, 0.05);
     border-left: 3px solid var(--primary-color);
 }
-
-
 </style>        
 <div class="container2">
         <header>
@@ -5566,7 +5564,6 @@ function activateCourse() {
 // Show notification
 
 // Submit review function - একাধিক রিভিউ সাপোর্ট সহ
-// Submit review function - রেটিং ভ্যালিডেশন সহ
 function submitReview() {
     const rating = document.getElementById('rating').value;
     const reviewText = document.getElementById('reviewText').value;
@@ -5579,35 +5576,10 @@ function submitReview() {
         return;
     }
     
-    // রেটিং ভ্যালিডেশন
-    if (!rating) {
-        showPopupNotification('অনুগ্রহ করে রেটিং নির্বাচন করুন', 'error');
-        
-        // রেটিং ড্রপডাউনে ফোকাস দিন
-        document.getElementById('rating').focus();
-        document.getElementById('rating').style.borderColor = '#dc3545';
-        document.getElementById('rating').style.boxShadow = '0 0 0 3px rgba(220, 53, 69, 0.1)';
-        
+    if (!rating || !reviewText) {
+        showNotification('অনুগ্রহ করে রেটিং এবং রিভিউ টেক্সট পূরণ করুন', 'অনুগ্রহ করে রেটিং এবং রিভিউ টেক্সট পূরণ করুন');
         return;
     }
-    
-    // রিভিউ টেক্সট ভ্যালিডেশন
-    if (!reviewText.trim()) {
-        showPopupNotification('অনুগ্রহ করে রিভিউ টেক্সট লিখুন', 'error');
-        
-        // রিভিউ টেক্সট এরিয়ায় ফোকাস দিন
-        document.getElementById('reviewText').focus();
-        document.getElementById('reviewText').style.borderColor = '#dc3545';
-        document.getElementById('reviewText').style.boxShadow = '0 0 0 3px rgba(220, 53, 69, 0.1)';
-        
-        return;
-    }
-    
-    // ভ্যালিডেশন পাস করলে স্টাইল রিসেট করুন
-    document.getElementById('rating').style.borderColor = '';
-    document.getElementById('rating').style.boxShadow = '';
-    document.getElementById('reviewText').style.borderColor = '';
-    document.getElementById('reviewText').style.boxShadow = '';
     
     const reviewData = {
         courseId: 'practical-ibarat',
@@ -5617,7 +5589,7 @@ function submitReview() {
         reviewText: reviewText
     };
     
-    fetch('https://tttt-tbz0.onrender.com/api/reviews', {
+    fetch('https://t-islamacademy.onrender.com/api/reviews', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -5628,7 +5600,7 @@ function submitReview() {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            showPopupNotification('আপনার রিভিউ সফলভাবে জমা দেওয়া হয়েছে!', 'success');
+            showNotification('আপনার রিভিউ সফলভাবে জমা দেওয়া হয়েছে!', 'আপনার রিভিউ সফলভাবে জমা দেওয়া হয়েছে!');
             
             // Add the new review to the UI dynamically
             const newReview = createReviewElement({
@@ -5645,18 +5617,24 @@ function submitReview() {
                 reviewsContainer.insertBefore(newReview, reviewsContainer.firstChild);
             }
             
-            // Clear the form (শুধুমাত্র রিভিউ টেক্সট ক্লিয়ার করুন)
+            // Clear the form (কিন্তু রেটিং রিসেট করবেন না)
             document.getElementById('reviewText').value = '';
             
+            // সফলতা মেসেজ দেখান
+            document.getElementById('reviewSuccessMessage').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('reviewSuccessMessage').style.display = 'none';
+            }, 3000);
         } else {
-            showPopupNotification(data.message || 'রিভিউ জমা দিতে সমস্যা হয়েছে', 'error');
+            showNotification(data.message || 'রিভিউ জমা দিতে সমস্যা হয়েছে', 'error');
         }
     })
     .catch(error => {
         console.error('Error submitting review:', error);
-        showPopupNotification('রিভিউ জমা দিতে সমস্যা হয়েছে', 'error');
+        showNotification('রিভিউ জমা দিতে সমস্যা হয়েছে', 'error');
     });
 }
+
 
 // UI-তে রিভিউ যোগ করুন
 
@@ -6203,6 +6181,8 @@ function showNotification(type, message) {
         setTimeout(() => popup.remove(), 300);
     }, 5000);
 }
+
+
 // পেজ লোড হলে চেক করুন
 document.addEventListener('DOMContentLoaded', function() {
     // লগইন স্ট্যাটাস চেক করুন
@@ -7566,105 +7546,8 @@ function createReviewElement(review) {
     
     return reviewElement;
 }
-
-
-
-
-
-
-
-// পপআপ নোটিফিকেশন ফাংশন
-function showPopupNotification(message, type = 'error') {
-    // বিদ্যমান নোটিফিকেশন থাকলে সরান
-    const existingPopup = document.getElementById('customPopupNotification');
-    if (existingPopup) {
-        existingPopup.remove();
-    }
-    
-    // নতুন পপআপ তৈরি করুন
-    const popup = document.createElement('div');
-    popup.id = 'customPopupNotification';
-    popup.className = `custom-popup ${type}`;
-    
-    popup.innerHTML = `
-        <div class="popup-content">
-            <span class="popup-message">${message}</span>
-            <span class="popup-close">&times;</span>
-        </div>
-    `;
-    
-    // পপআপ স্টাইল
-    popup.style.position = 'fixed';
-    popup.style.top = '20px';
-    popup.style.right = '20px';
-    popup.style.backgroundColor = type === 'error' ? '#f8d7da' : '#d4edda';
-    popup.style.color = type === 'error' ? '#721c24' : '#155724';
-    popup.style.padding = '15px 20px';
-    popup.style.borderRadius = '8px';
-    popup.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
-    popup.style.zIndex = '99999';
-    popup.style.transition = 'all 0.3s ease';
-    popup.style.opacity = '0';
-    popup.style.borderLeft = `4px solid ${type === 'error' ? '#dc3545' : '#28a745'}`;
-    popup.style.maxWidth = '350px';
-    popup.style.fontFamily = "'Hind Siliguri', 'Bangla', sans-serif";
-    
-    document.body.appendChild(popup);
-    
-    // এনিমেশন দিয়ে দেখান
-    setTimeout(() => {
-        popup.style.opacity = '1';
-        popup.style.transform = 'translateX(0)';
-    }, 10);
-    
-    // ক্লোজ বাটন
-    const closeButton = popup.querySelector('.popup-close');
-    closeButton.style.marginLeft = '15px';
-    closeButton.style.cursor = 'pointer';
-    closeButton.style.fontWeight = 'bold';
-    closeButton.style.fontSize = '18px';
-    
-    closeButton.addEventListener('click', function() {
-        popup.style.opacity = '0';
-        setTimeout(() => {
-            popup.remove();
-        }, 300);
-    });
-    
-    // স্বয়ংক্রিয় বন্ধ
-    setTimeout(() => {
-        if (popup.parentNode) {
-            popup.style.opacity = '0';
-            setTimeout(() => {
-                popup.remove();
-            }, 300);
-        }
-    }, 5000);
-}
-
-
-// DOM লোড হলে ইভেন্ট লিসেনার যোগ করুন
-document.addEventListener('DOMContentLoaded', function() {
-    // রেটিং সিলেক্ট পরিবর্তন হলে ভ্যালিডেশন স্টাইল রিমুভ করুন
-    const ratingSelect = document.getElementById('rating');
-    if (ratingSelect) {
-        ratingSelect.addEventListener('change', function() {
-            this.style.borderColor = '';
-            this.style.boxShadow = '';
-        });
-    }
-    
-    // রিভিউ টেক্সট ইনপুট হলে ভ্যালিডেশন স্টাইল রিমুভ করুন
-    const reviewText = document.getElementById('reviewText');
-    if (reviewText) {
-        reviewText.addEventListener('input', function() {
-            this.style.borderColor = '';
-            this.style.boxShadow = '';
-        });
-    }
-});
 </script>        
-    
+
 
 
 
