@@ -71,14 +71,13 @@ const Course = mongoose.model(
 const Review = mongoose.model(
   "Review",
   new mongoose.Schema({
-    courseId: { type: String, required: true },
+    courseId: { type: String, required: true }, // কোর্স আইডি যোগ করা হয়েছে
     reviewerName: { type: String, required: true },
     reviewerEmail: { type: String, required: true },
     rating: { type: Number, required: true, min: 1, max: 5 },
     reviewText: { type: String, required: true },
     date: { type: Date, default: Date.now },
     isApproved: { type: Boolean, default: true },
-    // নতুন ফিল্ড যোগ করুন - প্রতিটি রিভিউ ইউনিক আইডেন্টিফায়ার
     reviewId: { type: String, unique: true, default: () => Math.random().toString(36).substr(2, 9) }
   })
 );
